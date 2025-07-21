@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="tr" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>🏦 Barkod Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <div class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir">
+    <i class="bi bi-sun-fill" id="themeIcon"></i>
+  </div>
+
+<div class="container py-5">
+  <!-- BAŞLIK -->
+  <div class="dashboard-title text-center mb-5">
+    <h1 class="display-5 fw-bold text-gradient">
+      <i class="bi bi-upc-scan me-2 text-primary"></i> Barkod Okuma Dashboard
+    </h1>
+    <p class="lead text-muted">Gerçek zamanlı barkod takibi, yükleme ve raporlama</p>
+  </div>
+
+  <!-- CSV DİŞARI AKTAR -->
+  <div class="text-end mb-4">
+    <a href="{{ url_for('export_csv') }}" class="btn btn-outline-primary rounded-3 shadow-sm">
+      <i class="bi bi-download me-1"></i> CSV İndir
+    </a>
+  </div>
+
+  <!-- KAMERA -->
+  <div class="position-relative text-center rounded-4 shadow-lg overflow-hidden mx-auto mb-4" style="max-width: 480px;">
+    <video id="preview" autoplay muted playsinline class="w-100 rounded-4 bg-black"></video>
+    <canvas id="overlay" class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 2;"></canvas>
+    <div id="log" class="mt-2 text-primary fw-semibold">📷 Kamera başlatılıyor...</div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- BÖLÜM EKLEME -->
+  <form method="POST" class="mb-4">
+    <div class="card card-soft-blue p-4 shadow-sm">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+          <label for="section" class="form-label text-primary fw-semibold">
+            <i class="bi bi-diagram-3 me-2 fs-5"></i> Yeni Bölüm Adı Yazın
+          </label>
+        </div>
+        <div class="col-md-5">
+          <input type="text" class="form-control rounded-3" name="section" id="section" placeholder="Örn: Manav, Depo1, Üretim-3" required>
+        </div>
+        <div class="col-md-3 text-md-end">
+          <button type="submit" class="btn btn-primary btn-soft w-100 w-md-auto">
+            <i class="bi bi-check-circle me-1"></i> Kaydet & Aktif Et
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- BÖLÜM SİLME -->
+  <form method="POST" action="{{ url_for('delete_section') }}" class="mb-4">
+    <div class="card card-soft-red p-4 shadow-sm">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+          <label for="section_to_delete" class="form-label text-danger fw-semibold">
+            <i class="bi bi-trash3 me-2 fs-5"></i> Silinecek Bölümü Seçin
+          </label>
+        </div>
+        <div class="col-md-5">
+          <select class="form-select rounded-3" name="section" id="section_to_delete" required>
+            {% for sec in sections %}
+              <option value="{{ sec }}">{{ sec }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3 text-md-end">
+          <button type="submit" class="btn btn-outline-danger btn-soft w-100 w-md-auto" onclick="return confirm('Bu bölümü silmek istiyor musunuz?')">
+            <i class="bi bi-trash-fill me-1"></i> Sil
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- GÖRSEL YÜKLE -->
+  <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="mb-5">
+    <input type="hidden" name="section" value="{{ current_section }}">
+    <div class="card card-soft-green p-4 shadow-sm">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+          <label for="image" class="form-label text-success fw-semibold">
+            <i class="bi bi-image me-2 fs-5"></i> Barkod Görseli Seçin
+          </label>
+        </div>
+        <div class="col-md-5">
+          <input type="file" class="form-control rounded-3" name="image" id="image" accept="image/*" required>
+        </div>
+        <div class="col-md-3 text-md-end">
+          <button type="submit" class="btn btn-success btn-soft w-100 w-md-auto">
+            <i class="bi bi-upload me-1"></i> Yükle
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="section-divider"></div>
+  <div class="section-divider"></div>
+
+  <!-- TARİH FİLTRELEME (YENİ GRUPLU KART İÇİNDE) -->
+  <div class="card card-date-filter p-4 shadow-sm mb-4">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold text-dark">
+          <i class="bi bi-calendar-event me-2"></i> Başlangıç Tarihi
+        </label>
+        <input type="date" id="startDate" class="form-control rounded-3" onchange="applyDateFilter()">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold text-dark">
+          <i class="bi bi-calendar-check me-2"></i> Bitiş Tarihi
+        </label>
+        <input type="date" id="endDate" class="form-control rounded-3" onchange="applyDateFilter()">
+      </div>
+    </div>
+  </div>
+
+  <!-- FLASH -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info text-center shadow-sm rounded-3">{{ messages[0] }}</div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- BARKOD KARTLARI -->
+  <div class="row g-4">
+    {% for sec, codes in sections.items() %}
+    {% set sec_id = sec|replace('-', '_') %}
+    <div class="col-md-6">
+      <div class="card barcode-card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center section-header">
+        <span class="fw-bold">
+          <i class="bi bi-box-seam me-1"></i> {{ sec }}
+          <span class="badge bg-secondary">{{ codes | length }}</span>
+        </span>
+        <input type="text" class="form-control form-control-sm w-50" id="search-{{ sec_id }}" placeholder="Barkod ara..." onkeyup="filterBarcodes(this, '{{ sec_id }}')">
+      </div>
+        <form method="post" action="{{ url_for('bulk_delete') }}">
+          <input type="hidden" name="section" value="{{ sec }}">
+          <ul class="list-group list-group-flush barcode-list" id="list-{{ sec_id }}"></ul>
+          <nav class="mt-3">
+            <ul class="pagination justify-content-center" id="pagination-{{ sec_id }}"></ul>
+          </nav>
+          {% if codes %}
+          <div class="mt-3 d-flex justify-content-end px-3">
+            <button type="submit" class="btn btn-danger btn-sm rounded-3" onclick="return confirm('Seçilen barkodları silmek istiyor musunuz?');">
+              <i class="bi bi-trash-fill me-1"></i> Seçilenleri Sil
+            </button>
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer text-center mt-5 text-muted small">
+    &copy; {{ current_year }} Barkod Dashboard · <span class="fw-semibold">Bomensoft</span> tarafından geliştirildi.
+  </footer>
+</div>
+
+
+  <!-- VERİLERİ AKTAR -->
+  <script>
+    window.barcodeData = window.barcodeData || {};
+    {% for sec, codes in sections.items() %}
+    window.barcodeData["{{ sec|replace('-', '_') }}"] = {{ codes|tojson }};
+    {% endfor %}
+  </script>
+
+  <!-- SCRIPTLER -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

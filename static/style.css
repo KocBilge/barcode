@@ -1,0 +1,382 @@
+:root {
+    --bg-light: linear-gradient(to bottom right, #f2f6fc, #e9eef5);
+    --bg-dark: #1e1f2f;
+    --text-light: #2e3d50;
+    --text-dark: #f8f9fa;
+    --card-light: #ffffff;
+    --card-dark: #2a2b3c;
+    --border-light: #d1dce5;
+    --border-dark: #3a3f4e;
+    --accent: #0d6efd;
+    --text-muted: #6c757d;
+    --transition: all 0.3s ease-in-out;
+  }
+
+  .dashboard-title {
+    animation: fadeInDown 0.6s ease-in-out;
+  }
+
+  #recentList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  #recentList li:last-child {
+    border-bottom: none;
+  }
+  
+  #recentList li i {
+    color: #0d6efd;
+    margin-right: 8px;
+  }
+  
+  .recent-barcode {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .recent-time {
+    font-size: 0.85rem;
+    color: #777;
+  }  
+  
+  .text-gradient {
+    background: linear-gradient(45deg, #0d6efd, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .card-soft-blue {
+    background: #f5faff;
+    border: 1px solid #cce4ff;
+    border-left: 5px solid #339af0;
+    border-radius: 12px;
+  }
+  
+  .card-soft-red {
+    background: #fff5f5;
+    border: 1px solid #fcc2c3;
+    border-left: 5px solid #fa5252;
+    border-radius: 12px;
+  }
+  
+  .card-soft-green {
+    background: #f3fcf4;
+    border: 1px solid #b2f2bb;
+    border-left: 5px solid #40c057;
+    border-radius: 12px;
+  }
+  
+  .btn-soft {
+    border-radius: 10px !important;
+    font-weight: 500;
+    padding: 8px 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .card-soft-blue:hover,
+  .card-soft-red:hover,
+  .card-soft-green:hover {
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }  
+  
+  html[data-bs-theme="light"] body {
+    background: var(--bg-light);
+    color: var(--text-light);
+  }
+  
+  html[data-bs-theme="dark"] body {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+  
+  body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    transition: var(--transition);
+  }
+  
+  /* Başlık */
+  h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  /* Video Kutusu */
+  .video-box {
+    border: 4px solid var(--accent);
+    border-radius: 12px;
+    max-width: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: var(--transition);
+  }
+  
+  .video-box:hover {
+    transform: scale(1.01);
+  }
+  
+  /* Ortak Form Kartı */
+  .form-card {
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: var(--card-light);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+  }
+  
+  html[data-bs-theme="dark"] .form-card {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+    box-shadow: 0 6px 24px rgba(255, 255, 255, 0.03);
+  }
+  
+  /* Barkod Kartı */
+  .barcode-card {
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: var(--card-light);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+  }
+  
+  html[data-bs-theme="dark"] .barcode-card {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.03);
+  }
+  
+  .barcode-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Başlık İçeriği */
+  .section-header {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  html[data-bs-theme="dark"] .section-header {
+    border-color: var(--border-dark);
+  }
+
+  [data-bs-theme="light"] .card-soft-blue {
+    background-color: #e9f1fd;
+    border: 1px solid #cce0ff;
+  }
+  [data-bs-theme="dark"] .card-date-filter {
+  background-color: #1f2233;
+  border-left: 4px solid #6c757d;
+  color: #f8f9fa;
+}
+
+  [data-bs-theme="dark"] .card-soft-blue,
+  [data-bs-theme="dark"] .card-soft-red,
+  [data-bs-theme="dark"] .card-soft-green,
+  [data-bs-theme="dark"] .form-card,
+  [data-bs-theme="dark"] .barcode-card {
+    background-color: #1f2233;
+    border-color: #323646;
+  }
+
+  [data-bs-theme="dark"] .card-soft-blue {
+    background-color: #2a3548;
+    border: 1px solid #3a475e;
+  }
+  
+  [data-bs-theme="light"] .card-soft-red {
+    background-color: #fde9e9;
+    border: 1px solid #ffcccc;
+  }
+  
+  [data-bs-theme="dark"] .card-soft-red {
+    background-color: #482a2a;
+    border: 1px solid #5e3a3a;
+  }
+  
+  [data-bs-theme="light"] .card-soft-green {
+    background-color: #e9fbe9;
+    border: 1px solid #ccffcc;
+  }
+  
+  [data-bs-theme="dark"] .card-soft-green {
+    background-color: #2a4832;
+    border: 1px solid #3a5e47;
+  }  
+  [data-bs-theme="light"] .section-header {
+    background-color: #f8f9fa; /* eşdeğer: bg-light */
+    color: #212529;            /* eşdeğer: text-dark */
+  }
+  
+  [data-bs-theme="dark"] .section-header {
+    background-color: #2b3035; /* Bootstrap'in bg-dark tonu */
+    color: #f8f9fa;            /* açık metin */
+  }  
+  
+  /* Barkod Arama */
+  .barcode-search {
+    margin-top: 10px;
+  }
+  
+  /* Barkod Listesi */
+  .list-group-item {
+    font-size: 0.95rem;
+    border: none;
+    border-bottom: 1px solid #e6eaf0;
+    background: transparent;
+    transition: var(--transition);
+  }
+  
+  /* Butonlar */
+  .btn-primary, .btn-success {
+    font-weight: 600;
+    transition: var(--transition);
+  }
+  
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0b5ed7;
+  }
+  
+  .btn-success {
+    background-color: #198754;
+    border-color: #157347;
+  }
+  
+  /* Uyarılar */
+  .empty-message {
+    font-style: italic;
+    color: #999;
+  }
+  
+  /* Footer */
+  .footer {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 4rem;
+  }
+  
+  /* Tema Değiştir Butonu */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    background: var(--card-light);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.6rem;
+    transition: var(--transition);
+  }
+  
+  html[data-bs-theme="dark"] .theme-toggle {
+    background: var(--card-dark);
+  }
+  
+  .theme-toggle i {
+    font-size: 1.6rem;
+    color: var(--accent);
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .theme-toggle:hover {
+    transform: scale(1.1);
+  }
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, hsl(210, 4%, 49%), transparent);
+    margin: 2.5rem 0;
+    opacity: 0.3;
+    transition: var(--transition);
+  }
+  
+  html[data-bs-theme="dark"] .section-divider {
+    background: linear-gradient(to right, transparent, #495057, transparent);
+    opacity: 0.3;
+  }
+
+  /* ---------- RESPONSIVE AYARLAR ---------- */
+
+  @media (max-width: 576px) {
+    .dashboard-title h1 {
+      font-size: 1.8rem;
+    }
+
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .section-header input {
+      width: 100% !important;
+      margin-top: 0.75rem;
+    }
+
+    .btn-soft {
+      width: 100%;
+      margin-top: 0.75rem;
+    }
+
+    .theme-toggle {
+      top: 12px;
+      right: 12px;
+      padding: 0.5rem;
+    }
+
+    .barcode-card {
+      padding: 1rem;
+    }
+  }
+
+  @media (min-width: 577px) and (max-width: 768px) {
+    .dashboard-title h1 {
+      font-size: 2.2rem;
+    }
+
+    .section-header input {
+      width: 75%;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 992px) {
+    .dashboard-title h1 {
+      font-size: 2.4rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .container {
+      max-width: 1140px;
+    }
+  }
+
+      
